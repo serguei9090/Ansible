@@ -1,0 +1,9 @@
+---
+- name: Update package lists
+  hosts: all
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Update package lists
+      apt:
+        update_cache: yes
