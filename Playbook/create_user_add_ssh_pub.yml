@@ -1,0 +1,22 @@
+---
+#serch second line after PubkeyAuthentication
+- name: Ucreate user sudo
+  hosts: test
+  become: true
+  vars:
+    username1: test
+  
+  tasks:
+    - name: Create user "{{ username1 }}"
+      user:
+        name: "{{ username1 }}"
+        groups: sudo
+        append: yes
+        state: present
+    #add ssh key             
+    - authorized_key:
+        user: "{{ username1 }}"
+        state: present
+        manage_dir: yes
+        key: "{{ lookup('file', '/home/dvx-1/Ansible/ssh/dvx-1/public-ssh-devex.pub') }}"
+

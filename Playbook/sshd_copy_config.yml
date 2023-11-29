@@ -1,6 +1,6 @@
 ---
 #serch second line after PubkeyAuthentication
-- name: Update sshd_config PasswordAuthentication
+- name: Copy sshd_config 
   hosts: test
   become: true
   tasks:
