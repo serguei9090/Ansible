@@ -1,5 +1,5 @@
 ---
-#serch second line after PubkeyAuthentication
+#Create 1 user and add key and password
 - name: Ucreate user sudo
   hosts: test
   become: true

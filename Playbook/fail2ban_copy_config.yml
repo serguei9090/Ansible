@@ -1,0 +1,28 @@
+---
+#copy fail2ban config and jail file
+- name: Copy fail2ban config and jail 
+  hosts: test
+  become: true
+  tasks:
+    - name: Copy fail2ban_config template
+      template:
+        src: Templates/fail2ban_config
+        dest: /etc/fail2ban/fail2ban.conf
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Copy fail2ban_config_jail template
+      template:
+        src: Templates/fail2ban_config_jail
+        dest: /etc/fail2ban/jail.conf
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Restart fail2ban Service
+
+  handlers:
+    - name: Restart fail2ban Service
+      service:
+        name: fail2ban
+        state: restarted
