@@ -1,5 +1,5 @@
 ---
-#serch second line after PubkeyAuthentication
+#create batch users add password or update and keyfile
 - name: Ucreate user sudo
   hosts: test
   become: true
@@ -7,14 +7,18 @@
     username: 
         - name: "test"
           ssh_key: "{{ lookup('file', '/home/dvx-1/Ansible/ssh/dvx-1/public-ssh-devex.pub') }}"
-        - name: "test2"
+          password: "$6$MF8vSL.qxpqD8.gv$v6n9OeocAxbBQk3rzTChyn4VLgzLMjCkuGyHzYx8fCNZ3qrlYYNtjk1/o1bbjtFokCWQvgPCSSroxn2LoKvR30"
+        - name: "sbwork"
           ssh_key: "{{ lookup('file', '/home/dvx-1/Ansible/ssh/dvx-1/public-ssh-devex2.pub') }}"
-        - name: "test3"
-          ssh_key: "{{ lookup('file', '/home/dvx-1/Ansible/ssh/dvx-1/public-ssh-devex3.pub') }}"     
+          password: "$6$dXyyBfurqQztd1kS$Rte0Ft6Cn0gVOO.bdpyfccUXjNGNsy9cDSoGJcb9rsoUdocS54WlYk4XnsYm35Ly/5N2nWFA0lmA6kTYEpPg/1"
+#        - name: "test3"
+#          ssh_key: "{{ lookup('file', '/home/dvx-1/Ansible/ssh/dvx-1/public-ssh-devex3.pub') }}" 
+#          password: "$6$dXyyBfurqQztd1kS$Rte0Ft6Cn0gVOO.bdpyfccUXjNGNsy9cDSoGJcb9rsoUdocS54WlYk4XnsYm35Ly/5N2nWFA0lmA6kTYEpPg/1"    
   tasks:
     - name: Create user "{{ username }}"
       user:
         name: "{{ item.name }}"
+        password: "{{ item.password }}"
         groups: sudo
         append: yes
         state: present

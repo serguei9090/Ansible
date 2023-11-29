@@ -5,6 +5,8 @@
   become: true
   vars:
     username1: test
+    ssh_key: "{{ lookup('file', '/home/dvx-1/Ansible/ssh/dvx-1/public-ssh-devex.pub') }}"
+    password: "$6$MF8vSL.qxpqD8.gv$v6n9OeocAxbBQk3rzTChyn4VLgzLMjCkuGyHzYx8fCNZ3qrlYYNtjk1/o1bbjtFokCWQvgPCSSroxn2LoKvR30"
   
   tasks:
     - name: Create user "{{ username1 }}"
@@ -18,5 +20,6 @@
         user: "{{ username1 }}"
         state: present
         manage_dir: yes
-        key: "{{ lookup('file', '/home/dvx-1/Ansible/ssh/dvx-1/public-ssh-devex.pub') }}"
+        key: "{{ ssh_key }}"
+        password: "{{ password }}"
 
