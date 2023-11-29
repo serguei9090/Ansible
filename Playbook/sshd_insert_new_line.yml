@@ -1,0 +1,20 @@
+---
+#serch second line after PubkeyAuthentication
+- name: Update sshd_config PasswordAuthentication
+  hosts: test
+  become: true
+  tasks:
+    - name: Add new line with 'test' after PubkeyAuthentication
+      lineinfile:
+       path: /etc/ssh/sshd_config
+       insertafter: 'PubkeyAuthentication yes'
+       line: '     test'
+       backup: yes
+       state: present
+      notify: Restart SSH Service
+
+  handlers:
+    - name: Restart SSH Service
+      service:
+        name: sshd
+        state: restarted

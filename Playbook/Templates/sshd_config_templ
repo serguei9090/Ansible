@@ -1,0 +1,20 @@
+Include /etc/ssh/sshd_config.d/*.conf
+port 2200
+#Change when had 2 interface
+ListenAddress 0.0.0.0
+MaxAuthTries 3
+MaxSessions 3
+PasswordAuthentication no
+PermitEmptyPasswords no
+ChallengeResponseAuthentication no
+PermitRootLogin no
+LogLevel INFO
+StrictModes yes
+ClientAliveInterval 600
+ClientAliveCountMax 3
+PrintMotd no
+AcceptEnv LANG LC_*
+Subsystem       sftp    /usr/lib/openssh/sftp-server
+UsePAM yes
+Match Address 192.168.5.0/24,192.168.205.14,192.168.205.15,10.153.34.230,10.153.34.232,10.153.18.241,192.168.24.164,10.153.18.240
+        PubkeyAuthentication yes

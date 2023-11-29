@@ -1,0 +1,20 @@
+---
+#serch second line after PubkeyAuthentication
+- name: Update sshd_config PasswordAuthentication
+  hosts: test
+  become: true
+  tasks:
+    - name: Copy sshd_config template
+      template:
+        src: Templates/sshd_config_templ
+        dest: /etc/ssh/sshd_config
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Restart SSH Service
+
+  handlers:
+    - name: Restart SSH Service
+      service:
+        name: sshd
+        state: restarted
