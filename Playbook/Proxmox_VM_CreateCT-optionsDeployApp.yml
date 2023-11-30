@@ -1,0 +1,118 @@
+---
+#CreateCT
+- name: create ct
+  hosts: localhost
+  become: true
+  vars_files:
+    - ./vars/proxmox_var_dev.yaml
+    - - ../passwd.yml
+  vars:
+    ostemplates: "{{ ostemplate.debian11 }}"
+  vars_prompt:
+  #Write Hostname
+    - name: hostname_prompt #variable to store prompt
+      prompt: "Enter Hostname:"
+      private: false
+      default: "{{hostname}}"
+  #Put Disk Size
+    - name: disksize_prompt #variable to store prompt
+      prompt: "Enter disksize:"
+      private: false
+      default: "{{disk_size}}"
+  #Put memory Size
+    - name: memory_prompt #variable to store prompt
+      prompt: "Enter memory ram in mb:"
+      private: false
+      default: "{{memory}}"
+  #Set Ip address
+    - name: ip_prompt #variable to store prompt
+      prompt: "Enter ip with netsufix /24:"
+      private: false
+      default: "{{ip}}"
+  #Set gateway
+    - name: gateway_prompt #variable to store prompt
+      prompt: "Enter gateway:"
+      private: false
+      default: "{{gateway}}"
+  #Set Dns Server
+    - name: nameserver_prompt #variable to store prompt
+      prompt: "Enter nameserver DNS:"
+      private: false
+      default: "{{nameserver}}"
+  #Set domain search
+    - name: searchdomain_prompt #variable to store prompt
+      prompt: "Enter searchdomain:"
+      private: false
+      default: "{{searchdomain}}"
+  #Set root password
+    - name: password_prompt #variable to store prompt
+      prompt: "Enter root password:"
+      private: false
+      default: "{{proxdev_temp_pass}}"
+  #set preveleged or not
+    - name: unprivileged_prompt #variable to store prompt
+      prompt: "Enter unprivileged status yes/no:"
+      private: false
+      default: "{{unprivileged}}"
+      
+  tasks: 
+    #set Hostname
+    - set_fact:
+        hostname: "{{ hostname_prompt }}"
+    #set disk_size
+    - set_fact:
+        disk_size: "{{ disksize_prompt }}"
+    #set ip
+    - set_fact:
+        ip: "{{ ip_prompt }}"
+    #set gateway
+    - set_fact:
+        gateway: "{{ gateway_prompt }}"
+    #set nameserver
+    - set_fact:
+        nameserver: "{{ nameserver_prompt }}"
+    #set searchdomain
+    - set_fact:
+        searchdomain: "{{ searchdomain_prompt }}"       
+    #set password
+    - set_fact:
+        proxdev_temp_pass: "{{ password_prompt }}"   
+    #set gateway
+    - set_fact:
+        unprivileged: "{{ unprivileged_prompt }}"   
+    #set memory
+    - set_fact:
+        memory: "{{ memory_prompt }}"      
+
+    - name: Deploy CT on proxmox 
+      proxmox:
+        api_host: '10.153.12.20' # required. the host of the Proxmox VE cluster
+        api_user: "{{ proxdev_user }}" # required. the user to authenticate with
+        api_password: "{{ proxdev_pass }}" # not required. the password to authenticate with you can use PROXMOX_PASSWORD environment variable
+ #       vmid: '888' # not required. the instance id if not set, the next available VM ID will be fetched from ProxmoxAPI. if not set, will be fetched from PromoxAPI based on the hostname
+ #       validate_certs: no # not required. enable / disable https certificate verification
+        node: proxmox-devex-1 # not required. Proxmox VE node, when new VM will be created required only for C(state=present) for another states will be autodiscovered
+ #       pool:  # not required. Proxmox VE resource pool
+        password: '{{ proxdev_temp_pass }}' # not required. the instance root password required only for C(state=present)
+        hostname: "{{ hostname }}" # not required. the instance hostname required only for C(state=present) must be unique if vmid is not passed
+        ostemplate: "{{ ostemplates }}" # not required. the template for VM creating required only for C(state=present)
+        disk: "{{ storage }}:{{ disksize_prompt }}" # not required. hard disk size in GB for instance-----
+        cores: '{{ cores }}' # not required. Specify number of cores per socket.
+#        cpus: '{{ cpus }}' # not required. numbers of allocated cpus for instance
+        memory: '{{ memory }}' # not required. memory size in MB for instance
+        swap: '{{ swap }}' # not required. swap memory size in MB for instance
+        netif: "{{ netif }}" # not required. specifies network interfaces for the container. As a hash/dictionary defining interfaces.
+#        mounts:  # not required. specifies additional mounts (separate disks) for the container. As a hash/dictionary defining mount points
+#        ip_address:  # not required. specifies the address the container will be assigned
+        onboot: yes # not required. specifies whether a VM will be started during system bootup
+        storage: '{{ storage }}' # not required. target storage
+#        cpuunits: 1000 # not required. CPU weight for a VM
+        nameserver: '{{ nameserver }}' # not required. sets DNS server IP address for a container
+        searchdomain: '{{searchdomain}}' # not required. sets DNS search domain for a container
+        timeout: 30 # not required. timeout for operations
+        force: no # not required. forcing operations can be used only with states C(present), C(stopped), C(restarted) with C(state=present) force option allow to overwrite existing container with states C(stopped) , C(restarted) allow to force stop instance
+        state: present # not required. choices: present;started;absent;stopped;restarted. Indicate desired state of the instance
+#        pubkey:  # not required. Public key to add to /root/.ssh/authorized_keys. This was added on Proxmox 4.2, it is ignored for earlier versions
+        unprivileged: '{{ unprivileged }}' # not required. Indicate if the container should be unprivileged
+
+

@@ -1,0 +1,10 @@
+---
+- name: MemoryCheck
+  hosts: all
+  become: yes
+  become_method: sudo
+  tasks:
+    - name:
+      command: df -h
+      register: storage
+    - debug: var=storage.stdout_lines

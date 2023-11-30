@@ -1,0 +1,9 @@
+---
+- name: MemoryCheck
+  hosts: all
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: set timezone to Europe/Moscow
+      timezone:
+        name: Europe/Moscow
