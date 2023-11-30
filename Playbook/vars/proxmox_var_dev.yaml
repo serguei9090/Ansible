@@ -1,9 +1,28 @@
 ---
 storage: ceph-pool-1
+node:
+    node1: proxmox-devex-1
+    node2: proxmox-devex-2
+    node3: proxmox-devex-3
+    node4: proxmox-devex-4
+    node5: proxmox-devex-5
+    node6: proxmox-devex-6
 ostemplate:
     ubuntu22: 'cephfs-1:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst'
-    ubuntu20.04: 'cephfs-1:vztmpl/ubuntu-20.04-standard_20.04-1_amd64.tar.gz'
+    ubuntu20: 'cephfs-1:vztmpl/ubuntu-20.04-standard_20.04-1_amd64.tar.gz'
     debian11: 'cephfs-1:vztmpl/debian-11-standard_11.7-1_amd64.tar.zst'
     debian12: 'cephfs-1:vztmpl/debian-12-standard_12.2-1_amd64.tar.zst'
-    proxmoxmail8: 'cephfs-1:vztmpl/proxmox-mailgateway-8.0-standard_8.0-1_amd64.tar.zst'
-
+hostname: HostTest
+disk_size: 100
+disk: "{{ storage }}:{{ disk_size }}"
+cores: 4
+#cpus: 4
+memory: 4096
+swap: 4096
+ip: '10.153.18.250/24'
+gateway: 10.153.18.1
+bridge: vmbr0
+netif: '{"net0":"name=eth0,gw={{ gateway }},ip={{ ip }},bridge=vmbr0"}'
+nameserver: 10.153.18.30
+searchdomain: gruzef.ru
+unprivileged: no

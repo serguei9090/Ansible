@@ -5,18 +5,84 @@
   become: true
   vars_files:
     - ./vars/proxmox_var_dev.yaml
-    - ../passwd.yml
+#    - ../passwd.yml
+  vars:
+   counter: 0
+ 
+  vars_prompt:
+  #   #set ip address
+  #   - name: ip_prompt #variable to store prompt
+  #     prompt: "enter ip with netsufix /24:"
+  #     private: false
+  #     default: "{{ip}}"
+  # #set gateway
+     - name: result #variable to store prompt
+       prompt: |-           
+          Choose file to select:
+          {% for key in ostemplate %}
+          {{ loop.index }}: {{ key }}
+          {% endfor %}
+       private: false
+
+       #default: "{{gateway}}"
+
   tasks: 
-    - name: Prompt for hostname
-      prompt:
-        echo: yes
-        name: "hostname"
-        prompt: "Enter Hostname:"
-      register: hostname_prompt
-    - name: var1
-      debug:
-        msg: "{{ hostname_prompt }}"
+    # - set_fact:
+    #      OS: "{{ ostemplate[item] }}"
+    #   with_items: "{{ ostemplate }}"
+
+    # - set_fact:
+    #      OS: "{{ ostemplate.debian12 }}"
+    #   when: result == '2'
+    # - name: var2
+    #   debug:
+    #     msg: "{{ ostemplate.values()}}"
     - name: var2
       debug:
-        msg: "{{ ostemplate.debian11 }}"
+        msg: "{{ item.key }}"
+      with_dict: "{{ ostemplate }}"
+      #with_items: "{{ ostemplate }}"
+
+    # - name: var1
+    #   debug:
+    #     msg: "{{ ostemplate.ubuntu22 }}"
+    # - name: var1
+    #   debug:
+    #     msg: "{{ ostemplate2[0] }}"
+    # - name: var1
+    #   debug:
+    #     msg: | 
+    #       {% for key in ostemplate.values() %}
+    #       {{ key}}
+    #       {% endfor %}
+        
+
+      #set ip
+    # - pause:
+    #     prompt: |-
+    #       Choose file to select:
+    #       {% for file in ostemplate2 %}
+    #       {{ loop.index }}:{{ file }}
+    #       {% endfor %}
+    #   register: result
+    # - set_fact:
+    #     ip: "{{ ip_prompt }}"
+    #set gateway
+    # - set_fact:
+    #     gateway: "{{ gateway_prompt }}"
+  #  - set_fact:
+  #      hostname: "{{ hostname }}"
+#    - set_fact:
+#        deploy2: custom
+#        when:  ( deploy == "2")
+#    - name: var1
+#      debug:
+#        msg: "{{ item }}"
+#      with_items:
+#        - "{{ ostemplate }}"
+
+#    - name: var3
+#      debug:
+#        msg: '{{ item }}'
+#      loop: "{{ hostname_prompt2 }}"
         
