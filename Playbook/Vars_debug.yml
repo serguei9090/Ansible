@@ -1,0 +1,22 @@
+---
+#CreateCT
+- name: create ct
+  hosts: localhost
+  become: true
+  vars_files:
+    - ./vars/proxmox_var_dev.yaml
+    - ../passwd.yml
+  tasks: 
+    - name: Prompt for hostname
+      prompt:
+        echo: yes
+        name: "hostname"
+        prompt: "Enter Hostname:"
+      register: hostname_prompt
+    - name: var1
+      debug:
+        msg: "{{ hostname_prompt }}"
+    - name: var2
+      debug:
+        msg: "{{ ostemplate.debian11 }}"
+        

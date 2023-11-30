@@ -3,22 +3,28 @@
 - name: create ct
   hosts: localhost
   become: true
-  vars:
-      storage: ceph-pool-1
-      dvx1: Tem*nok24spb@
+  vars_files:
+    - ./vars/proxmox_var_dev.yaml
+    - - ../passwd.yml
   tasks: 
+    - name: Prompt for hostname
+      prompt:
+        echo: yes
+        name: "hostname"
+        prompt: "Enter Hostname:"
+      register: hostname_prompt
     - name: Deploy proxmox
       proxmox:
         api_host: '10.153.12.20' # required. the host of the Proxmox VE cluster
-        api_user: 'dvx-1@pam' # required. the user to authenticate with
-        api_password: 'Dev*nok24spb@' # not required. the password to authenticate with you can use PROXMOX_PASSWORD environment variable
-        vmid: '888' # not required. the instance id if not set, the next available VM ID will be fetched from ProxmoxAPI. if not set, will be fetched from PromoxAPI based on the hostname
+        api_user: "{{ proxdev_user }}" # required. the user to authenticate with
+        api_password: "{{ proxdev_pass }}" # not required. the password to authenticate with you can use PROXMOX_PASSWORD environment variable
+ #       vmid: '888' # not required. the instance id if not set, the next available VM ID will be fetched from ProxmoxAPI. if not set, will be fetched from PromoxAPI based on the hostname
  #       validate_certs: no # not required. enable / disable https certificate verification
         node: proxmox-devex-1 # not required. Proxmox VE node, when new VM will be created required only for C(state=present) for another states will be autodiscovered
  #       pool:  # not required. Proxmox VE resource pool
-        password: '{{ dvx1 }}' # not required. the instance root password required only for C(state=present)
+        password: '{{ proxdev_temp_pass }}' # not required. the instance root password required only for C(state=present)
         hostname: 'Test' # not required. the instance hostname required only for C(state=present) must be unique if vmid is not passed
-        ostemplate: 'cephfs-1:vztmpl/ubuntu-20.04-standard_20.04-1_amd64.tar.gz' # not required. the template for VM creating required only for C(state=present)
+        ostemplate: "{{ ostemplate.debian }}" # not required. the template for VM creating required only for C(state=present)
         disk: "{{ storage }}:20" # not required. hard disk size in GB for instance
         cores: 1 # not required. Specify number of cores per socket.
         cpus: 4 # not required. numbers of allocated cpus for instance
