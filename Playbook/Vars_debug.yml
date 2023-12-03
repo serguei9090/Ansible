@@ -7,8 +7,12 @@
     - ./vars/proxmox_var_dev.yaml
 #    - ../passwd.yml
   vars:
-   counter: 0
- 
+   os:
+      -  name: Debian #Debian
+         os: osdebianinstall
+
+      -  name: Ubuntu #Ubuntu
+         os: osUbuntuInstall
   vars_prompt:
   #   #set ip address
   #   - name: ip_prompt #variable to store prompt
@@ -19,17 +23,17 @@
      - name: result #variable to store prompt
        prompt: |-           
           Choose file to select:
-          {% for key in ostemplate %}
-          {{ loop.index }}: {{ key }}
+          {% for key in os %}
+            {{ loop.index }}: {{ key.name }}
           {% endfor %}
        private: false
-
+      #{{ loop.index }}:
        #default: "{{gateway}}"
 
   tasks: 
-    # - set_fact:
-    #      OS: "{{ ostemplate[item] }}"
-    #   with_items: "{{ ostemplate }}"
+    - set_fact:
+         result: "{{ result }}"
+      # with_items: "{{ ostemplate }}"
 
     # - set_fact:
     #      OS: "{{ ostemplate.debian12 }}"
@@ -39,8 +43,8 @@
     #     msg: "{{ ostemplate.values()}}"
     - name: var2
       debug:
-        msg: "{{ item.key }}"
-      with_dict: "{{ ostemplate }}"
+        msg: "{{ os[result].os   }}"
+
       #with_items: "{{ ostemplate }}"
 
     # - name: var1
