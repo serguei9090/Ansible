@@ -1,0 +1,10 @@
+{
+    "url": "https://10.153.10.24:8006/",
+    "username": "dvx-1@pve",
+    "validateCert": false,
+    "include": [".*"],
+    "exclude": [],
+    "token": "ansible",
+    "secret": "583929be-740c-451b-acaf-22feb54d0370" 
+}
+

@@ -1,0 +1,26 @@
+{
+    #Proxmox-Devex
+    "url": "https://10.153.12.20:8006/",
+    "username": "dvx-1@pam",
+    "password": "Dev*nok24spb@",
+    "validateCert": false
+
+    #proxmox-Telefonia
+    "url": "https://10.153.12.20:8006/",
+    "username": "dvx-1@pve",
+    "password": "Dev*nok24spb@",
+    "validateCert": false
+    
+    #Proxmox-City-kvm
+    "url": "https://10.153.0.31:8006/",
+    "username": "dvx-1@pve",
+    "password": "Cit*nok24spb@",
+    "validateCert": false
+    #Proxmox-City-Windows
+    "url": "https://10.153.2.26:8006/",    
+    "username": "dvx-1@pve",
+    "password": "Cit*nok24spb@",
+    "validateCert": false
+
+}
+

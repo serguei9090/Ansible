@@ -1,4 +1,5 @@
 ---
+
 #CreateCT
 - name: create ct
   hosts: localhost
@@ -43,7 +44,20 @@
     #     msg: "{{ ostemplate.values()}}"
     - name: var2
       debug:
-        msg: "{{ os[result].os   }}"
+        msg: "{{ os[0].os   }}"
+    - add_host:
+        name: "dvx-1@10.153.30.33"
+        groups: localhost2
+        os: "{{os}}"
+        ansible_port: 2200
+
+
+- hosts: localhost2
+  
+  tasks: 
+    - name: var2
+      debug:
+        msg: "testing2:  {{ os[0].os }}"
 
       #with_items: "{{ ostemplate }}"
 
