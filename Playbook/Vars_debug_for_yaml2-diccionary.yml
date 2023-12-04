@@ -1,0 +1,42 @@
+---
+
+#debung for
+- name: for list
+  hosts: localhost
+  become: true
+  vars_files:
+    - ./vars/proxmox_var_dev.yaml
+  # include_vars:
+  #    file: "archivo.json"
+#    - ../passwd.yml
+  # vars:
+  #  os:
+  #     -  name: Debian #Debian
+  #        os: osdebianinstall
+
+  #     -  name: Ubuntu #Ubuntu
+  #        os: osUbuntuInstall
+  vars_prompt:
+  - name: result #variable to store prompt
+    prompt: |-           
+          Choose file to select:
+          {% for key in ostemplate.keys() %}
+            {{ loop.index }}: {{ key }}
+          {% endfor %}
+
+    private: false
+    default: 1
+
+      #{{ loop.index }}:
+       #default: "{{gateway}}"
+
+  tasks: 
+    - set_fact:
+         list: "{{ostemplate.items()}}"
+         result: "{{result}}"
+
+    - name: var2
+      debug:
+         msg: "{{list[result|int][1]}}"
+         #msg: "{{ostemplate.values()}}" 
+ 

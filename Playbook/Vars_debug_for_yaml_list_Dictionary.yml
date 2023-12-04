@@ -1,0 +1,40 @@
+---
+
+#debung for
+- name: for list
+  hosts: localhost
+  become: true
+  vars_files:
+    - ./vars/proxmox_var_dev.yaml
+  # include_vars:
+  #    file: "archivo.json"
+#    - ../passwd.yml
+  vars:
+   os:
+      -  name: Debian #Debian
+         os: osdebianinstall
+
+      -  name: Ubuntu #Ubuntu
+         os: osUbuntuInstall
+  vars_prompt:
+  - name: result #variable to store prompt
+    prompt: |-           
+          Choose file to select:
+          {% for key in os %}
+            {{ loop.index }}: {{ key.name }}
+          {% endfor %}
+
+    private: false
+    default: 1
+
+      #{{ loop.index }}:
+       #default: "{{gateway}}"
+
+  tasks: 
+    - set_fact:
+         result: "{{result}}"
+
+    - name: var2
+      debug:
+         msg: "{{os[result|int-1].os}}" 
+ 

@@ -6,6 +6,8 @@
   become: true
   vars_files:
     - ./vars/proxmox_var_dev.yaml
+  # include_vars:
+  #    file: "archivo.json"
 #    - ../passwd.yml
   vars:
    os:
@@ -21,13 +23,21 @@
   #     private: false
   #     default: "{{ip}}"
   # #set gateway
-     - name: result #variable to store prompt
-       prompt: |-           
+  #   - name: result #variable to store prompt
+  #     prompt: |-           
+  #         Choose file to select:
+  #         {% for key in ostemplate.items %}
+  #           {{ loop.index }}: {{ key }}
+  #         {% endfor %}
+  #     private: false
+  #     # {{ loop.index }}:
+  - name: result #variable to store prompt
+    prompt: |-           
           Choose file to select:
           {% for key in os %}
             {{ loop.index }}: {{ key.name }}
           {% endfor %}
-       private: false
+    private: false
       #{{ loop.index }}:
        #default: "{{gateway}}"
 
@@ -44,20 +54,56 @@
     #     msg: "{{ ostemplate.values()}}"
     - name: var2
       debug:
-        msg: "{{ os[0].os   }}"
-    - add_host:
-        name: "dvx-1@10.153.30.33"
-        groups: localhost2
-        os: "{{os}}"
-        ansible_port: 2200
+        msg: "{{ os[1].os   }}"
+  # tasks: 
+    # - name:  json
+    #   include_vars:
+    #     file: "archivo.json"
+    # - name: Iterate through hostvars
+    #   debug:
+    #     msg: "proxmox_name value for each element: {{ item.value.proxmox_name }}"
+    #   loop: "{{ archivo.json | dict2items }}"
+    # - name: Read JSON file
+    #   slurp:
+    #     src: ./archivo.json
+    #   register: json_content
 
+    # - name: Parse JSON file
+    #   set_fact:
+    #     parsed_json: "{{ json_content.content | b64decode | from_json }}"
 
-- hosts: localhost2
+    # - name: Debug parsed JSON
+    #   debug:
+    #     var: parsed_json
+
   
-  tasks: 
-    - name: var2
-      debug:
-        msg: "testing2:  {{ os[0].os }}"
+
+    # - set_fact:
+    #      result: "{{ result }}"
+      # with_items: "{{ ostemplate }}"
+
+    # - set_fact:
+    #      OS: "{{ ostemplate.debian12 }}"
+    #   when: result == '2'
+    # - name: var2
+    #   debug:
+    #     msg: "{{ ostemplate.values()}}"
+    # - name: var2
+    #   debug:
+    #     msg: "{{ os[0].os   }}"
+    # - add_host:
+    #     name: "dvx-1@10.153.30.33"
+    #     groups: localhost2
+    #     os: "{{os}}"
+    #     ansible_port: 2200
+
+
+# - hosts: localhost2
+  
+#   tasks: 
+#     - name: var2
+#       debug:
+#         msg: "testing2:  {{ os[0].os }}"
 
       #with_items: "{{ ostemplate }}"
 
@@ -103,4 +149,15 @@
 #      debug:
 #        msg: '{{ item }}'
 #      loop: "{{ hostname_prompt2 }}"
+
+
+#Working
+    # - name: result #variable to store prompt
+    #   prompt: |-           
+    #       Choose file to select:
+    #       {% for key in ostemplate.items %}
+    #         {{ loop.index }}: {{ key }}
+    #       {% endfor %}
+    #   private: false
+
         
