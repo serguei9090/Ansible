@@ -19,10 +19,10 @@ cores: 4
 #cpus: 4
 memory: 4096
 swap: 4096
-ip: '10.153.18.250/24'
-gateway: 10.153.18.1
+ip: '192.168.1.3/24'
+gateway: 192.168.1.1
 bridge: vmbr0
 netif: '{"net0":"name=eth0,gw={{ gateway }},ip={{ ip }},bridge=vmbr0"}'
-nameserver: 10.153.18.30
-searchdomain: gruzef.ru
+nameserver: 192.168.1.2
+searchdomain: lcoal.local
 unprivileged: no
